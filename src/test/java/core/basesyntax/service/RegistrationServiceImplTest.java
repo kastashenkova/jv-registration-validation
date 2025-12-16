@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import core.basesyntax.dao.StorageDao;
 import core.basesyntax.dao.StorageDaoImpl;
+import core.basesyntax.db.Storage;
 import core.basesyntax.exception.RegistrationException;
 import core.basesyntax.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,12 +23,14 @@ class RegistrationServiceImplTest {
     private static User edgeLoginLengthUser;
     private static User edgePasswordLengthUser;
     private static User edgeAgeUser;
-    private static User shortLoginAndPasswordUser;
+    private static User shortLoginUser;
+    private static User shortPasswordUser;
     private static User youngUser;
     private final StorageDao storageDao = new StorageDaoImpl();
 
     @BeforeEach
     void setUp() {
+        Storage.people.clear();
         service = new RegistrationServiceImpl();
         validUser1 = new User();
         validUser1.setId(1L);
@@ -57,7 +60,7 @@ class RegistrationServiceImplTest {
         nullAgeUser.setId(5L);
         nullAgeUser.setLogin("validLogin2");
         nullAgeUser.setPassword("validPass2");
-        nullAgeUser.setAge(0);
+        nullAgeUser.setAge(null);
 
         negativeAgeUser = new User();
         negativeAgeUser.setId(6L);
@@ -83,14 +86,20 @@ class RegistrationServiceImplTest {
         edgeAgeUser.setPassword("validPass6");
         edgeAgeUser.setAge(17);
 
-        shortLoginAndPasswordUser = new User();
-        shortLoginAndPasswordUser.setId(10L);
-        shortLoginAndPasswordUser.setLogin("s");
-        shortLoginAndPasswordUser.setPassword("a");
-        shortLoginAndPasswordUser.setAge(22);
+        shortLoginUser = new User();
+        shortLoginUser.setId(10L);
+        shortLoginUser.setLogin("f");
+        shortLoginUser.setPassword("sdffjcdjvdjfn");
+        shortLoginUser.setAge(22);
+
+        shortPasswordUser = new User();
+        shortPasswordUser.setId(11L);
+        shortPasswordUser.setLogin("sdffjcdjvdjfn");
+        shortPasswordUser.setPassword("a");
+        shortPasswordUser.setAge(22);
 
         youngUser = new User();
-        youngUser.setId(11L);
+        youngUser.setId(12L);
         youngUser.setLogin("ivanenko");
         youngUser.setPassword("password1");
         youngUser.setAge(10);
@@ -154,13 +163,13 @@ class RegistrationServiceImplTest {
     @Test
     void register_shortLogin_notOk() {
         assertThrows(RegistrationException.class,
-                () -> service.register(shortLoginAndPasswordUser));
+                () -> service.register(shortLoginUser));
     }
 
     @Test
     void register_shortPassword_notOk() {
         assertThrows(RegistrationException.class,
-                () -> service.register(shortLoginAndPasswordUser));
+                () -> service.register(shortPasswordUser));
     }
 
     @Test
