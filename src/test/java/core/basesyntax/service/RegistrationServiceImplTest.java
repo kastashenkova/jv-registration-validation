@@ -13,19 +13,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RegistrationServiceImplTest {
-    private static RegistrationService service;
-    private static User validUser1;
-    private static User validUser2;
-    private static User nullLoginUser;
-    private static User nullPasswordUser;
-    private static User nullAgeUser;
-    private static User negativeAgeUser;
-    private static User edgeLoginLengthUser;
-    private static User edgePasswordLengthUser;
-    private static User edgeAgeUser;
-    private static User shortLoginUser;
-    private static User shortPasswordUser;
-    private static User youngUser;
+    private RegistrationService service;
+    private User validUser1;
+    private User validUser2;
+    private User nullLoginUser;
+    private User nullPasswordUser;
+    private User nullAgeUser;
+    private User negativeAgeUser;
+    private User edgeLoginLengthUser;
+    private User edgePasswordLengthUser;
+    private User edgeAgeUser;
+    private User shortLoginUser;
+    private User shortPasswordUser;
+    private User youngUser;
     private final StorageDao storageDao = new StorageDaoImpl();
 
     @BeforeEach
@@ -180,8 +180,9 @@ class RegistrationServiceImplTest {
 
     @Test
     void register_normalUser_Ok() {
-        assertNotNull(service.register(validUser2));
+        User registeredUser = service.register(validUser2);
+        assertNotNull(registeredUser);
         assertNotNull(storageDao.get(validUser2.getLogin()));
-        assertEquals(validUser2.getLogin(), storageDao.get(validUser2.getLogin()).getLogin());
+        assertEquals(validUser2, registeredUser);
     }
 }
