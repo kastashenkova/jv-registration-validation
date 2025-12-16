@@ -2,6 +2,7 @@ package core.basesyntax.service;
 
 import core.basesyntax.dao.StorageDao;
 import core.basesyntax.dao.StorageDaoImpl;
+import core.basesyntax.exception.RegistrationException;
 import core.basesyntax.model.User;
 
 public class RegistrationServiceImpl implements RegistrationService {
@@ -9,6 +10,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public User register(User user) {
-        return null;
+        if (user == null) {
+            throw new RegistrationException("User is null");
+        }
+        if (storageDao.get(user.getLogin()) != null) {
+            throw new RegistrationException("User already exists");
+        }
+        if (user.getLogin().length() < 6) {
+            throw new RegistrationException("Login is too short");
+        }
+        if (user.getPassword().length() < 6) {
+            throw new RegistrationException("Password is too short");
+        }
+        if (user.getAge() < 18) {
+            throw new RegistrationException("User is too young");
+        }
+        return storageDao.add(user);
     }
 }
